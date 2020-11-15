@@ -33,7 +33,7 @@ const Homepage = ({ posts }: PostsProps) => {
 
   return (
 	<Layout>
-      <section sx={{ mb: [5, 6, 7], p: { fontSize: [1, 2, 3], mt: 2 }, variant: `section_hero` }}>
+      <section sx={{ mb: [5, 6, 7], p: { fontSize: [1, 2, 2], mt: 2 }, variant: `section_hero` }}>
         <Hero />
       </section>
     </Layout>
