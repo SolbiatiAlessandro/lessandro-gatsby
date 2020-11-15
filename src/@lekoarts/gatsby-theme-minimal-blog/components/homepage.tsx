@@ -1,14 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui"
 import { Link } from "gatsby"
-import Layout from "./layout"
-import Title from "./title"
-import Listing from "./listing"
-import List from "./list"
-import useMinimalBlogConfig from "../hooks/use-minimal-blog-config"
-import useSiteMetadata from "../hooks/use-site-metadata"
-import replaceSlashes from "../utils/replaceSlashes"
-import { visuallyHidden } from "../styles/utils"
+import Layout from "@lekoarts/gatsby-theme-minimal-blog/src/components/layout"
+import useMinimalBlogConfig from "@lekoarts/gatsby-theme-minimal-blog/src/hooks/use-minimal-blog-config"
+import useSiteMetadata from "@lekoarts/gatsby-theme-minimal-blog/src/hooks/use-site-metadata"
+import replaceSlashes from "@lekoarts/gatsby-theme-minimal-blog/src/utils/replaceSlashes"
+import { visuallyHidden } from "@lekoarts/gatsby-theme-minimal-blog/src/styles/utils"
 // @ts-ignore
 import Hero from "../texts/hero"
 // @ts-ignore
@@ -40,9 +37,6 @@ const Homepage = ({ posts }: PostsProps) => {
       <section sx={{ mb: [5, 6, 7], p: { fontSize: [1, 2, 3], mt: 2 }, variant: `section_hero` }}>
         <Hero />
       </section>
-      <Title text="Latest Posts">
-        <Link to={replaceSlashes(`/${basePath}/${blogPath}`)}>Read all posts</Link>
-      </Title>
     </Layout>
   )
 }
