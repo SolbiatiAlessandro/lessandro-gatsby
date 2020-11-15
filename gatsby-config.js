@@ -42,6 +42,12 @@ module.exports = {
         ],
       },
     },
+	{
+      resolve: 'gatsby-plugin-load-script',
+      options: {
+        src: '/three_body.js', 
+      },
+    },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

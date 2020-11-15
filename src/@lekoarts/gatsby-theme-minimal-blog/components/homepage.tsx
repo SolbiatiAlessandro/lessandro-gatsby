@@ -36,7 +36,15 @@ const Homepage = ({ posts }: PostsProps) => {
       <section sx={{ mb: [5, 6, 7], p: { fontSize: [1, 2, 2], mt: 2 }, variant: `section_hero` }}>
         <Hero />
       </section>
-    </Layout>
+	</Layout>
+	<div id="body1" sx={{
+	  height:70px;
+		width:70px;
+		border-radius:50%;
+	  position: absolute;
+	  background-color: grey;
+	}}>
+	</div>
   )
 }
 
