@@ -14,6 +14,3 @@ var process;
 process.hrtime;
 var Java;
 Java.type;
-var figwheel;
-figwheel.client;
-figwheel.client.repl_result_pr_str;
