@@ -9,18 +9,16 @@ const Footer = () => {
     <footer
       sx={{
         boxSizing: `border-box`,
-        display: `flex`,
         justifyContent: `space-between`,
-        mt: [6],
+        mt: [8],
         color: `secondary`,
         a: {
           variant: `links.secondary`,
         },
         flexDirection: [`column`, `column`, `row`],
-        variant: `dividers.top`,
       }}
 	>
-	  <div>Your browser is currently running a simulation of the <a>Three Body Problem</a> written in <a>ClojureScript</a>, you can <b><a>read the code here</a></b>.
+	  <div>The floating objects are a simulation of the <a>Three Body Problem</a> written in the Lisp dialect <a>ClojureScript</a>, you can <b><a>read the code here</a></b>.
 	  </div>
     </footer>
   )

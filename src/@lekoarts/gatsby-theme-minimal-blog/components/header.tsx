@@ -17,19 +17,11 @@ const Header = () => {
   }
 
   return (
-    <header sx={{ mb: [5, 6] }}>
+    <header sx={{ mb: [2, 3] }}>
       <Flex sx={{ alignItems: `center`, justifyContent: `space-between` }}>
         <HeaderTitle />
         <ColorModeToggle isDark={isDark} toggle={toggleColorMode} />
       </Flex>
-      <div
-        sx={{
-          boxSizing: `border-box`,
-          variant: `dividers.bottom`,
-          color: `secondary`,
-        }}
-      >
-      </div>
     </header>
   )
 }

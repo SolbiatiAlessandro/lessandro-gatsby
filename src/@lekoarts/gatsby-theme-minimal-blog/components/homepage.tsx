@@ -37,14 +37,6 @@ const Homepage = ({ posts }: PostsProps) => {
         <Hero />
       </section>
 	</Layout>
-	<div id="body1" sx={{
-	  height:70px;
-		width:70px;
-		border-radius:50%;
-	  position: absolute;
-	  background-color: grey;
-	}}>
-	</div>
   )
 }
 
