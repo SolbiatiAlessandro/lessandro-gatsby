@@ -12,3 +12,7 @@ var body = document.body || document.getElementsByTagName("body")[0];
     }
   }
 )
+
+const threeBodyAnimationOn = function () {
+  return window.location.pathname == "/"
+}

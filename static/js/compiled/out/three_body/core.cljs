@@ -1,8 +1,26 @@
 (ns three-body.core
-    (:require ))
+  "Animates three html elements simulating the Three Body Problems.
+  The three elements need to look like this:
+
+	  <div id='body1'></div>
+	  <div id='body2'></div>
+	  <div id='body3'></div>
+
+  You should also implement a function `threeBodyAnimationOn` 
+  that returns true for the animation to run and false for the 
+  animation to freeze.
+
+  How you might want you use it is to run
+
+      `lein cljsbuild once min`
+
+  And serve the generated files in `js/compiled`
+
+  ref. PHYSICS for more informations on the simulation
+  "
+  (:require ))
 
 (def debug false)
-
 
 ;; DATASTRUCTURES
 
@@ -17,7 +35,10 @@
 (defn body [id] (Body. id (rand-x) (rand-x) 0 0 0 0 false))
 (defn init-bodies [n] (map (fn [id] (body (+ 1 id))) (range n)))
 (def comb [[1 2] [0 2] [0 1]])
+
 (def prev-ts (atom start-time))
+(def stop-running-ts (atom nil))
+
 (def bodies (atom (init-bodies 3)))
 
 ;; PHYSICS
@@ -94,9 +115,25 @@
          ] bodies)
    ))
 
+(defn three-body-animation-off 
+  "return false if animation is on, return decading dt if animation is off" [initial-dt] 
+  (let [running (js/threeBodyAnimationOn)
+        decay 0.1
+        ts-nil (= @stop-running-ts nil)]
+    (cond 
+      (and (not running) ts-nil) (swap! stop-running-ts (fn [_ x] x) initial-dt) ;; first step after stopping
+      (and (not running) (not ts-nil)) (swap! stop-running-ts (fn [prev] (max 0 (- prev decay) ))) ;; stopping
+      (and running (not ts-nil)) (swap! stop-running-ts (fn [_ x] x) nil)  ;; first step after restarting
+      )
+    @stop-running-ts))
+
 (defn step-physics-simulation [bodies dt]
   (let [
-        dt (min dt max-time-step) ;; prevent velocity explosion for large lagged timesteps
+        ;; prevent velocity explosion for large lagged timesteps 
+        running-dt (min dt max-time-step)
+        ;; reduces gradually dt when stopping animation
+        stopped-dt (three-body-animation-off running-dt)
+        dt (if (not stopped-dt) running-dt stopped-dt) 
         bodies-i (step-accelleration bodies)
         bodies-i1 (step-position bodies-i dt)
         bodies-i1 (step-accelleration bodies-i1)
@@ -114,6 +151,7 @@
     (let [style (.-style (.getElementById js/document (str "body" (:id body))))]
       (set! (.-bottom style) (str (:y body) "%"))
       (set! (.-left style) (str (:x body) "%")))))
+
 
 (defn main [ts]
   (do
