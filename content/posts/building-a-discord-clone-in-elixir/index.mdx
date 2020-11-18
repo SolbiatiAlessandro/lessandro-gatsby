@@ -24,7 +24,7 @@ Elixir uses [Ecto](https://hexdocs.pm/ecto/getting-started.html) as a Database w
 
 Writing database interactions highlights how Elixir is concise. Loading all the messages from a chatroom and push them to the front-end can be done just [with a one-liner](https://github.com/SolbiatiAlessandro/dixord/blob/1f784bd928efed2ae860c1af23da3f2db35d2c70/dixord/lib/dixord_web/channels/room_channel.ex#L27), using a pipe operator with a lambda function passed to [Enum.each](https://hexdocs.pm/elixir/Enum.html).
 
-![](https://www.lessandro.herokuapp.com/static/imgs/dixord-1.png)
+![](https://lessandro.herokuapp.com/static/imgs/dixord-1.png)
 
 After 15 minutes of building that's what I have got. You can try it at [https://dixord.herokuapp.com/](https://dixord.herokuapp.com/)
 
@@ -36,7 +36,7 @@ Elixir allows you to have a scalable number of concurrent processes in your serv
 
 To pick up this new pattern I found a code-guided tutorial on elixirschool.com [LiveView with PubSub Presence](https://elixirschool.com/blog/live-view-with-presence/). The tutorial hasn't that many stars on Github, but the author [Sophie DeBenedetto](http://sophiedebenedetto.nyc/) has a bunch of talks at Elixir conference about LiveView so I will follow along.
 
-![](https://www.lessandro.herokuapp.com/static/imgs/dixord-2.png)
+![](https://lessandro.herokuapp.com/static/imgs/dixord-2.png)
 
 Dixord with server side rendered messages, with 0 lines of javascript (and around 50 of elixir).
 
@@ -50,13 +50,13 @@ The [Phoenix.Presence](https://hexdocs.pm/phoenix/Phoenix.Presence.html) module 
 
 To track users inside the app we can use the concept of [Plugs](https://hexdocs.pm/plug/readme.html). Plugs is a Elixir specification to build composable modules in web application: you can build a _authenticate\_user_ function plug and then [plug it](https://hexdocs.pm/phoenix/plug.html#content) into any Endpoint, Router or Controller on Phoenix.
 
-![](https://www.lessandro.herokuapp.com/static/imgs/dixord-3.png)
+![](https://lessandro.herokuapp.com/static/imgs/dixord-3.png)
 
 With 50 more lines of plain Elixir I added real-time features like a list of guests that are online in the chat, and a real-time indicator of who is typing.
 
 Once you pick up the Presence pattern (really similar to LiveView) is really easy to add a bunch of features. You just need to go in your _.leex_ template, add some triggers like _phx\_change_ on a DOM element, and finally add a handler in the LiveView object that broadcast the update either through Presence or directly through the Endpoint. You can see in my [~50 elixir lines commit](https://github.com/SolbiatiAlessandro/dixord/commit/c3326ee7d41f5f8cc623d4e537210d7789aaaa85) how I added all the features listed in the image above following this pattern.
 
-![](https://www.lessandro.herokuapp.com/static/imgs/dixord-4.png)
+![](https://lessandro.herokuapp.com/static/imgs/dixord-4.png)
 
 Lines of code count for Dixord with the features in the screenshot above, 46 lineswith 80% test coverage ;)
 
@@ -64,13 +64,13 @@ Lines of code count for Dixord with the features in the screenshot above, 46 lin
 
 MIX is the Elixir package manager, that is a similar flavour to Ruby on Rails let you generate a bunch of scaffolding files with just one command. For example [mix.phx.gen.html User](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Html.html) generates for you a surprising rich amount features for the static resource User. Beside views and controllers it generates test (more than 40+) and documentations that are pretty useful to understand the best practices inside Phoenix.
 
-![](https://www.lessandro.herokuapp.com/static/imgs/dixord-5.png)
+![](https://lessandro.herokuapp.com/static/imgs/dixord-5.png)
 
 I added User model to Dixord using the mix.phx.gen.html scaffolding utilities
 
 I went on to build a User model, that came out pretty easy with the nice Ecto APIs (the Elixir database query language): after building the association between \`message\` and \`user\` I didn't need to user any JOIN statement but I just added the [Repo.preload](https://hexdocs.pm/ecto/Ecto.Query.html#preload/3), that preload all the associations on the model you are querying.
 
-![](https://www.lessandro.herokuapp.com/static/imgs/dixord-6.png)
+![](https://lessandro.herokuapp.com/static/imgs/dixord-6.png)
 
 I set up the Pow library for authentication together with my User model
 
