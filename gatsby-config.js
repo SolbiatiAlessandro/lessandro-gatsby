@@ -42,6 +42,31 @@ module.exports = {
         ],
       },
     },
+	{
+    resolve: `gatsby-transformer-remark`,
+    options: {
+      plugins: [
+        {
+          resolve: `gatsby-remark-image-attributes`,
+          options: {
+
+            // ?Boolean=true
+            //   If true (the default), all CSS
+            //   property names will be recognized
+            //   as styleAttribute.
+            styleAttributes: true,
+
+            // ?Boolean=false
+            //   If true, all attributes that
+            //   aren't styleAttributes, will be
+            //   added as data-* attributes to the
+            //   image.
+            dataAttributes: false
+			}
+		  }
+		]
+	  }
+	},
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

@@ -1,0 +1,36 @@
+---
+title: Building a Physics Engine
+date: 2020-09-11
+tags:
+  - physics
+  - programming
+  - ClojureScript
+---
+
+I got my hands on [Landau, Course of Theoretical Physics](https://en.wikipedia.org/wiki/Course_of_Theoretical_Physics). I want to challenge my understanding of the book by writing a physics engine that provide a computational layer for the book chapter by chapter.
+
+### Just another Physics Engine
+
+Out there you can find any sort of stuff if you are interested in physics engines, from general computation frameworks like [Mathematica](https://www.wolfram.com/mathematica/) to game engines like [Unreal](https://www.unrealengine.com/en-US/?lang=en-US). A good textbook on physics engines is [Structure and Interpretation of Classical Mechanics](https://mitpress.mit.edu/books/structure-and-interpretation-classical-mechanics-second-edition), an unusual physics textbook that approach the subject from computational perspective.
+
+Even if originally I had the idea of building the Physics Engine in Lisp, I wanted to build something that works in the web, so I eventually turned my attention to Javascript. [three.js](https://threejs.org/) looks like a good starting point for the 3d rendering part, and turns out it works also in virtual reality: I managed to build [an immersive 3d website](https://github.com/SolbiatiAlessandro/threejs-getting-started) in a couple of hour that run on my [Oculus Quest](https://www.oculus.com/quest/?locale=en_GB).
+
+### Fluid Simulation
+
+I will be start with the hard part of implementing Navier-Stokes equation, following the paper [Real Time Fluid Dynamics for Game, Stam 2003](https://www.semanticscholar.org/paper/Real-Time-Fluid-Dynamics-for-Games-Stam/5127ac7b58e36ffd13ca4437fc123c6a018dc436?p2df).
+
+I implemented it in [ClojureScripts](https://clojurescript.org/) and so far got pretty recent results, you can find it at [https://github.com/SolbiatiAlessandro/steamengine](https://github.com/SolbiatiAlessandro/steamengine). I named it `steamengine` since I want to try to simulate the fluid-dynamics physical process of steam engines. Here are three examples of what you can do with the implementation of that paper:
+
+1. **[https://youtube.com/d7r9XxQVUjM](https://www.youtube.com/watch?v=d7r9XxQVUjM)** 3D diffusion of water in a box (from a Oculus Quest 1 browser) 
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/d7r9XxQVUjM/0.jpg)](https://www.youtube.com/watch?v=d7r9XxQVUjM)
+
+2. **[https://youtu.be/LBo67lY-p7E](https://youtu.be/LBo67lY-p7E)** 2D diffusion of water under static diagonal velocity field in a box (from Laptop browser) 
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/LBo67lY-p7E/0.jpg)](https://www.youtube.com/watch?v=LBo67lY-p7E)
+
+3. **[https://youtu.be/eVWq8RlS6tc](https://youtu.be/eVWq8RlS6tc)** 2d diffusion of water (from Laptop browser) 
+
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/eVWq8RlS6tc/0.jpg)](https://www.youtube.com/watch?v=eVWq8RlS6tc)
+
+

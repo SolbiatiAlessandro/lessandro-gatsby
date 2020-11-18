@@ -1,0 +1,83 @@
+---
+title: Building a Discord clone in Elixir
+date: 2020-11-18
+tags:
+  - programming
+  - Elixir
+---
+
+Elixir is a functional programming language designed for high-concurrency. Lately I heard many cool startup using it (like [tandem.chat](https://www.tandem.chat) from YC W20), so I want to give it a go. I am building clone of the messaging app [Discord](https://discordapp.com/) from scratch, it should be live at [https://dixord.herokuapp.com](https://dixord.herokuapp.com).
+
+_shut up and [show me the code](https://github.com/SolbiatiAlessandro/dixord)_
+
+\### The MVC layer
+
+I am following this [phoenix-chat-tutorial](https://github.com/dwyl/phoenix-chat-example), and I will be calling my Discord clone ["Dixord"](https://github.com/SolbiatiAlessandro/dixord) (from Elixir Discord). We are using the [Phoenix](https://www.phoenixframework.org/) web framework, that has a terrific documentation. The first concept I bump into is [Phoenix channels](https://hexdocs.pm/phoenix/channels.html). There is some awesomeness already, quoting from the docs
+
+_""" Channels support long-lived connections, each backed by a lightweight BEAM process, working in parallel and maintaining its own state. This architecture scales well; Phoenix Channels can support millions of subscribers with reasonable latency on a single box, passing hundreds of thousands of messages per second. And that capacity can be multiplied by adding more nodes to the cluster. """_
+
+Channel is an abstraction over websockets, the Phoenix architecture lets you define and manipulate Channels inside the \`lib\` folder using [Elixir controllers](https://github.com/dwyl/phoenix-chat-example/blob/fb02977db7a0e749a6eb5212749ae4df190f6b01/lib/chat_web/channels/user_socket.ex#L5), and then the magic \`socket\` modules from phoenix let you subscribe to Channels using Javascript.
+
+\### The Data layer
+
+Elixir uses [Ecto](https://hexdocs.pm/ecto/getting-started.html) as a Database wrapper and query generator. It's not strictly a ORM since there are not objects in Elixir, but provides you a convenient way to speak with the database. A nice syntactic sugar I just discovered while writing the queries is the [pipe operator](https://elixirschool.com/en/lessons/basics/pipe-operator/), that work exactly like in Bash.
+
+Writing database interactions highlights how Elixir is concise. Loading all the messages from a chatroom and push them to the front-end can be done just [with a one-liner](https://github.com/SolbiatiAlessandro/dixord/blob/1f784bd928efed2ae860c1af23da3f2db35d2c70/dixord/lib/dixord_web/channels/room_channel.ex#L27), using a pipe operator with a lambda function passed to [Enum.each](https://hexdocs.pm/elixir/Enum.html).
+
+![](http://www.lessand.ro/static/imgs/dixord-1.png)
+
+After 15 minutes of building that's what I have got. You can try it at [https://dixord.herokuapp.com/](https://dixord.herokuapp.com/)
+
+After setting up [ExUnit](https://hexdocs.pm/ex_unit/ExUnit.html) (the unit test framework) and code coverage I am uploading my toy chat to Heroku. Unfortunately the process is not as smooth as Python, with some manual buildpacks step required, but the [documentation](https://hexdocs.pm/phoenix/heroku.html) is still great. The app is live at [https://dixord.herokuapp.com/](https://dixord.herokuapp.com/).
+
+\### Server Side Rendering
+
+Elixir allows you to have a scalable number of concurrent processes in your server, this fits well the Server Side Rendering pattern: instead of compiling the html on the front-end (using React), you compile the html on the back-end in the server. You can do that cause every client maintains an open socket connection with the server, and with that connections the client receives live updates in form of super small JSON. Among the other advantages, this makes the code complexity an order of magnitude easier, like building a [Twitter clone in 15-minutes](https://www.youtube.com/watch?v=MZvmYaFkNJI) with real-time updates. Server Side Rendering is inside the [PhoenixLiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html) module in Phoenix, and if you still don't totally get you can watch [PhoenixLiveView for non-Elixir developers.](https://www.youtube.com/watch?v=U_Pe8Ru06fM)
+
+To pick up this new pattern I found a code-guided tutorial on elixirschool.com [LiveView with PubSub Presence](https://elixirschool.com/blog/live-view-with-presence/). The tutorial hasn't that many stars on Github, but the author [Sophie DeBenedetto](http://sophiedebenedetto.nyc/) has a bunch of talks at Elixir conference about LiveView so I will follow along.
+
+![](http://www.lessand.ro/static/imgs/dixord-2.png)
+
+Dixord with server side rendered messages, with 0 lines of javascript (and around 50 of elixir).
+
+I went on and [added the Server Side Rendering](https://github.com/SolbiatiAlessandro/dixord/blob/44e04cf6567ca3ff2cf395316f5fddb19adf3c29/lib/dixord_web/live/chat_live_view.ex) pattern to Dixord. I basically built a 'react component' in the backend, in what Elixir calls a LiveView. This component sends rendered html to the front end, and allowed me to [add that discord styling](https://github.com/SolbiatiAlessandro/dixord/commit/e4748b219ad376b60f672d5369fa6087810fde42) you can see in the picture above.
+
+LiveView allow us to have 0 javascript codebase thanks to server side rendering of html. We might still need some Javascript hooks though to implement some UX features, for instance we want the chat to scroll down all the time there is a new message. LiveView supports [JS interop Hooks](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#module-js-interop-and-client-controlled-dom), so with just 5 line of Javascript I can complete a pretty functional chat that scrolls down at every new message received/sent.
+
+\### More real-time features with Phoenix.Presence
+
+The [Phoenix.Presence](https://hexdocs.pm/phoenix/Phoenix.Presence.html) module is an interesting abstraction to track presence (e.g. who is online) across processes or channels. Under the hood it works with the same broadcasting mechanics ([Phoenix.PubSub](https://hexdocs.pm/phoenix_pubsub/2.0.0/Phoenix.PubSub.html)) of LiveView that we already used before. In this section we are going to build a guests tracking system for Dixord, that assign a guests name to every connected user and shows you which guests are online at any given moment.
+
+To track users inside the app we can use the concept of [Plugs](https://hexdocs.pm/plug/readme.html). Plugs is a Elixir specification to build composable modules in web application: you can build a _authenticate\_user_ function plug and then [plug it](https://hexdocs.pm/phoenix/plug.html#content) into any Endpoint, Router or Controller on Phoenix.
+
+![](http://www.lessand.ro/static/imgs/dixord-3.png)
+
+With 50 more lines of plain Elixir I added real-time features like a list of guests that are online in the chat, and a real-time indicator of who is typing.
+
+Once you pick up the Presence pattern (really similar to LiveView) is really easy to add a bunch of features. You just need to go in your _.leex_ template, add some triggers like _phx\_change_ on a DOM element, and finally add a handler in the LiveView object that broadcast the update either through Presence or directly through the Endpoint. You can see in my [~50 elixir lines commit](https://github.com/SolbiatiAlessandro/dixord/commit/c3326ee7d41f5f8cc623d4e537210d7789aaaa85) how I added all the features listed in the image above following this pattern.
+
+![](http://www.lessand.ro/static/imgs/dixord-4.png)
+
+Lines of code count for Dixord with the features in the screenshot above, 46 lineswith 80% test coverage ;)
+
+\### Generating code with Mix.Phx.Gen
+
+MIX is the Elixir package manager, that is a similar flavour to Ruby on Rails let you generate a bunch of scaffolding files with just one command. For example [mix.phx.gen.html User](https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Html.html) generates for you a surprising rich amount features for the static resource User. Beside views and controllers it generates test (more than 40+) and documentations that are pretty useful to understand the best practices inside Phoenix.
+
+![](http://www.lessand.ro/static/imgs/dixord-5.png)
+
+I added User model to Dixord using the mix.phx.gen.html scaffolding utilities
+
+I went on to build a User model, that came out pretty easy with the nice Ecto APIs (the Elixir database query language): after building the association between \`message\` and \`user\` I didn't need to user any JOIN statement but I just added the [Repo.preload](https://hexdocs.pm/ecto/Ecto.Query.html#preload/3), that preload all the associations on the model you are querying.
+
+![](http://www.lessand.ro/static/imgs/dixord-6.png)
+
+I set up the Pow library for authentication together with my User model
+
+I decided to add two other nice dependencies to Dixord. The first is [Pow](https://github.com/danschultzer/pow), a Elixir native authentication system for web app to complement my User model I created just before. The second is [Surface](https://github.com/msaraiva/surface), a server-side rendering component library that allows me to write React style front-end code instead of native Elixir [EEx templates](https://hexdocs.pm/eex/EEx.html). With this two new entries it took me just another afternoon of coding to build the full authentication flow for my User model as in the screenshot above. Notably, Pow offers a sister library [Pow\_assent](https://github.com/pow-auth/assent) to enable different login providers like Facebook or Github, here is a nice video about buiiding e2e authentication in Elixir [Easy Authentication in Elixir & Phoenix with the pow & pow\_assent libraries](https://www.youtube.com/watch?v=hnD0Z0LGMIk).
+
+\### A more complex system design with Chats and Servers
+
+So far we built just a single view application, let's take a step further and add a system that supports a two-level hierarchy of Servers (set of chats) and Chats (set of messages). Phoenix had an extensive guide that articulate system design best practices around the [Phoenix.Context](https://hexdocs.pm/phoenix/contexts.html) module: a tool to modularise and contain the complexity of Elixir systems. I found a nice talk if you want to dig more in to this: [Building Beautiful Systems With Phoenix Contexts and Domain-Driven Design](https://www.youtube.com/watch?v=5MBGDM8xSQg) from ElixirDaze 2018.
+
+At end of the day, Phoenix.Context are just Elixir modules that serve the purpose of abstracting away specific design decision from the rest of the application. The powerful idea here is that decoupling contexts from one another will allows us later to use event-driven messaging, where different context communicate just by publishing and subscribing to specific events. This pattern is rooted in the singular OTP behaviour that Elixir is built in, more on that in [Intro to OTP in Elixir](https://www.youtube.com/watch?v=CJT8wPnmjTM).
