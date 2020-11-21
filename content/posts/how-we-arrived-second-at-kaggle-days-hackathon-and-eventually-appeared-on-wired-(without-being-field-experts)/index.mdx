@@ -1,0 +1,52 @@
+---
+title: How we arrived second at Kaggle Days Hackathon and eventually appeared on Wired (without being field-experts)
+date: 2020-11-20
+tags:
+  - machine learning
+  - programming
+  - Kaggle
+---
+
+This time playing smart worked better than playing hard: using 2019-state-of-the-art approaches to predictive machine learning (autoML) was a winning idea. Here is how we did it and why it worked. (And how we got [mentioned on WIRED](https://www.wired.com/story/googles-ai-experts-try-automate-themselves/))
+
+### Kaggle Days
+
+If you are unfamliar with it, Kaggle is a pretty famous website where companies upload their data and let people compete in building Machine Learning models that perform useful tasks. I have been an amatour Kaggler for almost 1 year now (as one of my side hobbies), and having a good ranking on the site I got invited in San Francisco at the biggest Kaggle event around: Kaggle Days San Francisco. The thing looked dope! I really wanted to meet the guy from Keras (Francois Chollet) and the guy from AutoML (Quoc Le) that would have been attending the event as well, so I just jumped on a plane from Boston to San Francisco and got ready to get some west coast sun after a month of east coast freezing air.
+
+The place was unsurprisingly nerdy, with a room of 300 hunderds Kagglers speaking about data cleaning, feature engineering and picking up XGBoost vs LightGBM fights. Most of them were random guys like me, but there were some Kaggle Grandmasters walking around and I couldn't wait to (literally) put my hands on them to suck out the knowledge out of their brains.
+
+### Enters: ALDAPOP team
+
+The big thing of Kaggle Days San Francisco was this offline team-based competition that was gonna be held in a Hackathon style (10 hours of redbull, food, and occasionaly coding) on the last day. I figure out I needed to team up with some strong guys to compensate my n00bness, so I deployed my advanced social networking skills early on in order to get in some fancy team.
+
+From the first moment I was sure I ended up with two of the coolest dudes in the room. The first was David, a misterious progammer from Ukraine living in London that came to the event to raise funding for his start-up. The second was Paul, a visionary VC from Boston that spends half of his days attending conferences like Kaggle Days. We were a certainly a peculiar team, especially since Paul spoke an excellent Italian so we could make all sort of nerdy jokes without David understanding what was going on!
+
+We were no grandmasters, and we had no super-advanced data-cleaning skills. The main strength of the team tough was that we (they) were pretty much up-to-date with everything going on in the Machine Learning world. Both David and Paul were highly involved in the (real) Machine Learning start-up scene, and knew everything about the latest stuff going on. This turned out to be key for getting the second place, even more than our precious data-cleaning skills.
+
+### The secret sauce: Auto Machine Learning
+
+With plenty of redbull and pastries we started the Hackathon at nine o'clock of the last day. The competition was about predicting manufacturing defects in an industrial production chain. You were given anonimized data and the task was to predict whether the item was defected.
+
+We started playing around with data, we did some exploration, tried some basic model, but we wanted to do something fancier. We couldn't wait to try Auto Machine Learning. This is the hot stuff in Machine Learning right now, and is a pretty simple concept. Usually people try to build a Machine Learning model that learn solve a task, instead you can build a Machine Learning model that builds a Machine Learning model that learn to solve a task. The thing has been around for almost a year now, and has been called as 'AI that builds AI'.
+
+If you ever played around with Machine Learning models you know how most of task are actually pretty mechanic, and it always boils down to build a data pipeline with a predictive model. The idea behind AutoML is to perform an architecture search over the space of predictive models using some optimized heuristics: either genetic algorithms or reinforcement learning.
+
+However, as almost everything in the Tech space nowadays, you don't really need to know everything about some new technologies to try them out. Turns out there are plenty of out-of-the-box packages that let you try autoML on your dataset in any different flavours you want. During the competition we (of-course) had some heavy-weight machinery ready to do the dirty job, and we worked along-side couple of autoML engines for several hours before getting a performant model that could score second in the ranking.
+
+The strategy turned out to be incredibly powerful, beating also couple of Kaggle Grandmasters. We hand crafted lots of feature using old-school Machine Leaning methods, while the autoML engines were trying out and ensembling dozens and dozens of models. After five hours of iterating through this process, many CPUs and even many more RedBulls, we eventually got a pretty high score on the leaderboard.
+
+### The secret sauce of Auto Machine Learning: computation
+
+Turns out that out of the first five teams in the leaderboard, two (Google AutoML and H2O DriverlessAI) were non-human teams, i.e. was a pure AI building a Machine Leaning model without human intervention. The thing actually got mentioned on Wired in this article (where we are also appearing being in the podium). So it looks like this AutoML agents are pretty strong! How can this algorithms be so smart to beat 300 of the best humans around?
+
+After working alongside this agents for several hours the obvious point is that humans are being outsmarted mainly because of a computation perspective. As Sam Altman often says, AI is becoming more and more computation based and less and less data based. An AutoML agent beats a human because in half an hour he is able to evaluate over 50 models trying any different kind of pipelines and ensemble method. That's the real work being done. For sure the genetic algorithm search helps a lot, but the core that enable the magic to happen is the computational power.
+
+I think this might be the key takeaway I got from the whole Kaggle Conference and the Google Next '19 Conference as well (that was held alongside the Kaggle one). The real big advancement in AI today are made on the computing side, more then on the algorithm side. At the end of the day aren't neural networks just 'stupidly' over-parametrized linear regression ensembles? We don't really know why neural nets converge so efficiently, we just feed them computational power and we get back correct labels, sweet!
+
+If this sounds like an exageration, let me just introduce you to the new Google TPU v3 that appeared at the Google Next '19. So there is the old good CPU, the cooler GPU, originally used for computer graphic but lately revived to train deep neural networks, and now the new guy: the TPU (Tensor Processing Unit). Put simply TPU is a piece of hardware specifically designed to train deep neural networks. What is so cool about it? You guessed it: speed.
+
+The most astonishing session for me at Google Next '19 was in fact the talk on Google TPU (v3), where they were showing how fast they became. The talk was pretty interesting (and techinical) and if you have the background I highly encourage you to have a look at it here, the main fact is that they trained a full ResNet from scratch during the talk in less than 30 minutes!. I couldn't believe my eyes.
+
+### TLDR
+
+We actually put some old-school Machine Learning work into the Hackathon, and it paid out.The real secret for winning tough was embracing the new direction in AI: is all about computing. Auto Machine Learning will probably arrive to outperform humans in most of Machine Leaning tasks soon, and quoting from SunTzu 'if you can't defeat them, make them friends'.

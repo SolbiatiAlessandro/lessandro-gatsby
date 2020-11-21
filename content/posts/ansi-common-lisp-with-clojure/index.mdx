@@ -1,0 +1,34 @@
+---
+title: ANSI Common Lisp with Clojure
+date: 2020-11-20
+tags:
+  - programming
+  - Clojure
+  - Lisp
+---
+
+I have always been fascinated by obscure technologies, after reading Paul Graham essays about ViaWeb I decided to spend the weekend to learn lisp.
+
+### A first look with Practical Common Lisp
+
+Being a strong vim user I have mixed feeling about using emacs for writing Lisp. Turns out you need to use emacs, since is actually built in Lisp. I am following [Practical Common Lisp](http://www.gigamonkeys.com/book) and the [Common Lisp Cookbook](https://lispcookbook.github.io/cl-cookbook/getting-started.html) to get started (since getting a hold on Paul Graham "Ansi Common Lisp" book is surprisingly hard. Together with the book I am also followinig [6.001 Structure And Interpretation of Computer Program](https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-001-structure-and-interpretation-of-computer-programs-spring-2005/), a course from MIT from 1986 about Lisp.
+
+My firsts attempt is _building a toy database query language_ (e.g. SQL) in Lisp. I am trying to do it along side with python, and I am pushing the limits of its functional programming style: In Lisp we are writing [closures for WHERE clauses](https://github.com/SolbiatiAlessandro/PracticalCommonLisp/blob/41a660ed32272d2bb3c600d3ad68aae0b85c712a/Chapter3/cd-database.lisp#L55), and we construct SELECT statements that passes around those closures. With Python I am applying filters [passing around lambda functions](https://github.com/SolbiatiAlessandro/PracticalCommonLisp/blob/41a660ed32272d2bb3c600d3ad68aae0b85c712a/Chapter3/cd-database.py#L20) and so far it holds. But if we try to write UPDATE statements, keeping Python functional starts to make the [code totally unreadable](https://github.com/SolbiatiAlessandro/PracticalCommonLisp/blob/41a660ed32272d2bb3c600d3ad68aae0b85c712a/Chapter3/cd-database.py#L37). On the other hand, Lisp is code still looks pretty clean: we use [funcall](https://github.com/SolbiatiAlessandro/PracticalCommonLisp/blob/41a660ed32272d2bb3c600d3ad68aae0b85c712a/Chapter3/cd-database.lisp#L67) to apply the WHERE closure.
+
+### Better setup with Clojure
+
+As Paul Graham mentioned on the 18th March 2020, the go-to option to learn Lisp is the Lisp-dialect [Clojure](https://clojure.org/). One interesting features is that Clojure compiles natively to the JVM and also to Javascript with [ClojureScript.](https://clojurescript.org/)
+
+> Clojure.
+> 
+> — Paul Graham (@paulg) [March 18, 2020](https://twitter.com/paulg/status/1240218967865778177?ref_src=twsrc%5Etfw)
+
+I set up my VIM using [vim-fireplace](https://www.vim.org/scripts/script.php?script_id=4978), that provides Clojure REPL support. As explained at [clojure-doc.org](http://clojure-doc.org/articles/tutorials/vim_fireplace.html), we can make vim speak with a [lein repl](https://clojure.org/guides/repl/launching_a_basic_repl#_leiningen), having a bunch of features like _:cpr_ to reload the code in the REPL, _:gf_ goes to function definition, _:cpp_ to evaluate the form under the cursor in the REPL and _:cqp_ to open a quasi-REPL in vim. Here is a [cheatsheet](https://gist.github.com/nblumoe/5450099) for all the commands.
+
+### 2. Learning the syntax (Chapters 1 to 5)
+
+We get introduced right away to the concept that _Lisp programs are expressed as lists_: Lisp programs can generate Lisp code. A interesting point of different is between Lisp list and [Clojure sequences](https://clojure.org/reference/sequences#_the_seq_interface), you use first instead of car and rest instead of cdr. Even with this basic concept the syntax between the two dialects varies moderately, here is the [Clojure code from chapter two.](https://github.com/SolbiatiAlessandro/ANSICommonLisp/blob/bcabbd680c7afef8599d13342ef4c31cd32977a6/src/ansi_common_lisp/core.clj#L70) I went on up to chapter 5 [translating all the Lisp example in Clojure.](https://github.com/SolbiatiAlessandro/ANSICommonLisp/blob/cdc69c476fb2eedfa92cfa93759ec0835170c974/src/ansi_common_lisp/chapter3.clj#L71) Nothing remarkable, beside learning that in Clojure they don't _actually_ have the Lisp cons operator, but they have equivalents [(cons, conj, concat).](https://medium.com/@greg_63957/conj-cons-concat-oh-my-1398a2981eab)
+
+### 3. Deep Dive in the Functional (Chapter 6+)
+
+From Chapter6 we have a fun exercise of implementing the language [Dylan](https://opendylan.org/), a Lisp with some elaborate functional operators like _compose_, _conjoin_, and _disjoin_.

@@ -1,0 +1,96 @@
+---
+title: Building tools to model your lifestyle
+date: 2020-11-20
+tags:
+  - programming
+  - life logging
+---
+
+This post is to report my continued effort into building tools to model, analyse and organize my everyday life. I started from a really convoluted [TODO app,](https://github.com/SolbiatiAlessandro/TODAG) and now I am evolving from that to track everything about myself 24/7.
+
+  
+
+After having recently settled down with a [full-time job](http://www.lessand.ro/7/post) (Facebook), my life transitioned from a "swim-or-sink" mode to a "relax-and-think" mode. Since then I noticed how my human brain is not optimized for analytical tracking and modelling, whereas for social interactions. I felt the urge to create some sort of tooling to analytically model my lifestyle and provide insight on how to iteratively improve my life experience.
+
+### Scope of the project
+
+I worked on something similar for the last year, building my [TODAG](https://github.com/SolbiatiAlessandro/TODAG), that stands for TODO-DAG: a non-trivial graph representation of the different task that I need to do day by day. I used it for a long time and that gave a lot of time to reflect ([here some notes I wrote](https://github.com/SolbiatiAlessandro/TODAG/blob/master/docs/concept.rst)) on how best ideate some tooling to help me improve my lifestyle on the long term. I will update here for the scope and areas of interest of the project.
+
+*   [Prioritize your activites](https://github.com/SolbiatiAlessandro/TODAG/blob/master/docs/concept.rst) - This is the scope of [TODAG](https://github.com/SolbiatiAlessandro/TODAG), i.e. don't waste brainpower all the time you sit down to work to figure out what to do, instead write down an expert rule-based engine that tells you what to do: the key benefits are that you won't need to remember what you need to do, and you won't need to compute a priority list all the time. I wrote a lot on this on the [concept.rst on the GitHub repo.](https://github.com/SolbiatiAlessandro/TODAG/blob/master/docs/concept.rst)
+*   Model your life - This is a bigger scope that I am currently working on (and the reason why I wrote this post), is not defined yet how this can look like a product. I want to define this scope better also through writing these notes.
+
+### What is modelling and what do I need it for?
+
+A big takeaway from how I use TODAG is that having a computational model of your activities helps on different fronts, both querying "what I need to do" but also analyzing your activities objectively. This became evident when I added [mood tracking](https://github.com/SolbiatiAlessandro/TODAG/blob/master/docs/development.rst) to my TODAG. It allowed having a daily report on my mood correlated with my productivity, and that was really great, both in terms of analysing and also predicting my future mood in a specific situation. I see modelling as an extension of the mood tracker, here is a definition (that I will update over time).
+
+ What is lifestyle modelling? _The activity of creating a computational model of my day-to-day activities, from sleeping to eating, from working to relaxing. The computational model is brought to life by tracking different metrics like sleep hours, mood, location, heart rate and so on._
+
+If you ever worked for a big tech company (like where I work now), you see how everything is based on metrics. I find really compelling walking around floors and seeing these big screens with team health metrics broadcasted live, the main goal of most people in the company is to _move the metrics_ (in Facebook we have stuff like user engagement, Monthly Active People, and so on). I find this metrics framework to be incredibly exciting and also pretty much well established, and I think that applying this to lifestyle modelling can lead to interesting results. Here comes the second important question, what do I do with these metrics.
+
+ Why lifestyle modelling? _Having a bird-eye view on your life situation enables to take ownership easier on the different aspects of your everyday life. From goal-tracking to things like "I want to be 10% more relaxed in the next month". This means practically that you recurrently sit down and examine your metric, ideally every night. This is like in some strategy video-game match where you examine how much soldiers you lost/killed in the battle, here you sit down and examine what did you do today, and how your metrics were._
+
+### How to implement tracking in your life?
+
+For now, this is more of a brainstorming session. I will report here my attempt to a different kind of tracking and see how they work out.
+
+*   Logging - This being the most trivial one, it consists of logging values manually inside some device, it is totally not scalable/objective but is great for experimenting. I have been logging my mood for the last month and it required a lot of effort, but it totally paid out. Logging can be considered as an MVP for tracking new metrics.
+*   Smart devices - This being a bit more sophisticated but still trivial, for example, smartwatches. They do a great job at tracking fundamental physical info like heart-rate, with a bit of data wrangling other metrics could be inferred from there. I did some reading about other smart devices, but beside watches, I didn't get a good impression of them, they all looked expensive and not that interesting since they just accomplish really intuitive functions like thermometers. Of course, the best smart device of all is your smartphone, that is a perfect _segway_ for the next point.
+*   Download existing data - Here we start getting into the non-trivial. Turns out that your smartphone is already tracking a load of data, from locations to website usages. You might be surprised how much is being tracked if you join laptop and smartphone. Do we have access to this data? Yes, we do! We actually have legal right to do it thanks to the [recent GDPR](https://gdpr-info.eu/art-20-gdpr/). You can go on your personal consumer Facebook app and download all the tracking data about yourself just on [their website](https://www.facebook.com/help/1701730696756992?helpref=hc_global_nav).
+
+This listed will be updated with new ideas I will have about the tracking, in the meanwhile, I will start implementing something on GitHub while I will leave this blog post as a _concept page_ for the project.
+
+### How I am going to build this
+
+As a Google Cloud enthusiast I found a product that looks promising: [Stackdriver](https://cloud.google.com/stackdriver/) (NOTE: I have no affiliation with that). Is basically a monitoring service from implemented with the [Google Cloud suite](https://cloud.google.com) that I am already pretty familiar using. I examined a couple of options and would I like about Stackdriver is that let you build custom metrics and then [export your metrics chart in an external dashboard.](https://cloud.google.com/monitoring/charts/sharing-charts) The plan as follows.
+
+*   \[x\] Set up life metric web app to collect metrics and set up basic dashboard landing
+*   \[x\] Integrate existing TODAG client application to the new life metric webapp
+*   \[x\] Create Stackdriver interface to collect custom metric
+*   \[x\] Create Stackdriver charts and export them to webapp
+
+  
+![](https:/lessandro.herokuapp.com/static/imgs/datamonitor1.png)
+
+A first prototype of my data monitoring web app, bootstrap template + Google Cloud backend took less than 24 hours to build it.
+
+I have proceeded building this monitoring app and created a repo on my GitHub called [datamonitor](https://github.com/SolbiatiAlessandro/datamonitor). Is basically a GAE (Google App Engine) instance with some login features that receives POST requests from logged user with metrics, it send the metrics to Google Stackdriver (sort of Prometheus like service) and then display the historical chart of all the metrics. Now next step is to start adding metrics and creating more complex queries over them. Next metric I am planning to add:
+
+*   \[x\] productivity metric from TODAG (when I work on my to-do)
+*   \[ \] Facebook data (location, activities)
+*   \[ \] [Google data](https://myactivity.google.com/item) (how I interact with the smart devices I have in my house or how I use Chrome)
+*   \[ \] health metric from the future smartwatch I am planning to buy
+
+I also started to log the metrics on a POSTGRESQL database so that I can build custom [chart.js diagrams](https://www.chartjs.org) on my dashboard. I recently discovered that the library is nicely integrated with my bootstrap template so I might as well give it a try.
+
+What will I do with custom charts? A good product strategy for what I want to build is seeing your daily life as a video game. Having a dashboard with real-life metric powered custom chart enables the gamification to a super immersive extent: this is how it may look like.
+
+*   1\. You sit down at night, open your dashboard and you see the metrics for the day: today you worked five hours, you chilled three hours, this was your mood, you stayed 6 hours in the office and 6 hours home. You are performing 80% in line with your long term goals.
+*   2\. After having seen the metric you might want to recalibrate the prioritisation system. I want to improve my relax by 10% or my productivity by 10% in the next days. Thes eare the new to-dos that I collected during the day (I call this feature the to-do buffer), and here is how they impact importance/urgency.
+*   3\. The last step (that can be done now or in the morning) is click the NEXT DAY button and let the system draw the plan for the next day. The all thing is wired in with your different calendars for outside meetings, but most importantly with the system prioritisation framework. It will lay down a plan broke down hour by hour on how the following day will look like. You can, of course, edit this and in the process adjust your calibration framework.
+*   4\. The next day begins and the system guides you through the day with different integrations like push-notifications on your devices and automatically booking time on your different calendars.
+
+![](https:/lessandro.herokuapp.com/static/imgs/datamonitor2.png)
+
+7-Days-Productivity histogram (custom-chart) built using chart.js library and google stack driver backend
+
+Now I need to figure out more detail on how to build the single custom charts. Some ideas are to have a daily aggregate with productivity and activity hour by hour during the day. The fundamental metrics are time logged for productivity tasks, the number of productivity tasks seen, mood during the day, browsing activity, and a location. I think having this 5 metrics down aggregated by hour gives you a nice holistic view on how the day went.
+
+(01.07.2019) I started doing some research on how to log browsing activity and turns out I need to write myself a scraper since there are now public APIs to access that. I found some [similar repo implemented in go](https://github.com/jpathy/google-myactivity) , I will probably implement my own Python version of that. In the meanwhile, I improved the logging in terms of productivity tracking: I [implemented](https://github.com/SolbiatiAlessandro/datamonitor/commit/de6b2439ad7c7addae05ab952bdf53d9fb8c5d27) a planning tool that allows me to plan the day ahead and to track exactly how much time I worked on the things I planned I was going to work on. It looks like this.
+
+![](https:/lessandro.herokuapp.com/static/imgs/datamonitor3.png)
+
+Some cards inside the Daily-recap dashboard, related to the planning tracking tool.
+
+This fits into the [daily recap dashboard](https://github.com/SolbiatiAlessandro/datamonitor/commit/a9d5c0a62115f9a83ce9ec298200819061eaac29), where beside planning I want to put an hour-by-hour aggregate of my daily activity, both of productivity and also of browsing history.
+
+(09.07.2019) I used this dashboard for a week and it does its job but it looks a bit empty, I worked in previous days about integrating [myactivity.google.com](https://myactivity.google.com) inside my dashboard. I am really fascinated by the amount of personal data I can find on myactivity, they will totally make my dashboard more rich and accurate. I opened a new standalone repo to implement this scarper at [github.com/SolbiatiAlessandro/google\_myactivity\_scarper](https://github.com/SolbiatiAlessandro/google_myactivity_scraper). I looked for couple of options and how to build this and I decided to use [bs4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#) for the actual scraping and [pyppetterr](https://pypi.org/project/pyppeteer/) to run Chrome Headless. Where bs4 was kind of an obvious choice, I was not too familiar with headless browsers: you basically run chrome without the browser rendering. There is a nice library maintained by the Chrome/Chromium dudes called [Puppeteer](https://pptr.dev/), you can run headless Chrome as a nodejs application, and the trick is that [it can track your cookie sessions](https://github.com/GoogleChrome/puppeteer/issues/921) and automatically login into your google account to get your activity. ![](https:/lessandro.herokuapp.com/static/imgs/datamonitor4.png)
+
+You can read your own activity at [myactivity.google.com](myactivity.google.com). I was able to build a parser that sends all my personal info to my datamonitor backend
+
+(14.07.2019) After a lot of trials and error [I was able to build a parser for Google MyActivity](https://github.com/SolbiatiAlessandro/datamonitor/commit/b2e788a95ccbcd435b1e8ff23e629a200a0b676a). Turns out the python version of the app couldn't handle persistent login session so I needed to switch to NodeJs. Now that I am parsing all my activities from Google I need to think of an efficient way to organize them. The idea I am having is to [embed Google Calendar](https://support.google.com/calendar/answer/41207?hl=en) inside my web app and use the [google calendar API](https://developers.google.com/calendar/create-events) to add them to the calendar so I can clearly see how I am spending my time. On top of that, I will add a couple of additional metrics like 'time spent browsing' and so o.
+
+![](https:/lessandro.herokuapp.com/static/imgs/datamonitor5.png)
+
+Prototype for the integration of Google My Activity and Productivity Metrics with Google Calendar (these events are being automatically generated with Google Calendar APIs)
+
+(28.07.2019) So I started using this integration with google calendar and is a really nice idea. Is still a bit confusing since I am logging too many things now, and it looks way more confusing then the image above. What looks neat is this concept of **review the day** at 21:00pm. This is to make sure that you don't get carried away by things during your day. [Find time to focus and think](https://movieposters.ha.com/itm/movie-posters/miscellaneous/facebook-motivational-poster-facebook-2010s-screen-print-poster-18-x-24-don-t-mistake-motion-for-progress-/a/7132-86754.s). Make checkpoints where I analyse if I am going in the right directions: [don't mistake motion for progress](https://movieposters.ha.com/itm/movie-posters/miscellaneous/facebook-motivational-poster-facebook-2010s-screen-print-poster-18-x-24-don-t-mistake-motion-for-progress-/a/7132-86754.s). This review time is when you actually open Google Calendar and you check what you did during the day, and you write some ideally notes. I will try to implement this for the next few weeks and check how it works

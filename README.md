@@ -1,3 +1,8 @@
+This is the code running my blog https://lessand-ro.onrender.com 
+Analytics at https://analytics.amplitude.com/lessandro/chart/6qq6mb0
+
+====
+
 <p align="center">
   <a href="https://minimal-blog.lekoarts.de">
     <img alt="LekoArts" src="https://img.lekoarts.de/gatsby/gatsby-site-illustration.png" />

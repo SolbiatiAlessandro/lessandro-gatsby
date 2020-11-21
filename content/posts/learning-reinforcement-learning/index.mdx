@@ -1,0 +1,96 @@
+---
+title: Learning Reinforcement Learning
+date: 2020-11-20
+tags:
+  - programming
+  - machine learning
+  - reinforcement learning
+---
+
+Reinforcement Learning (RL) keeps coming back and I finally took action in getting hands-on experience on the topic. Here is what I am trying to do.
+
+*   Collect resources on Reinforcement Learning
+*   Play with 2D grid-world gym
+*   Learn imitation learning
+*   Play with physics simulations gym
+
+So I am taking Harvard CS109, and this week there was a great Advanced Section on Reinforcement Learning. [slides here](https://github.com/Harvard-IACS/2019-CS109B/blob/master/content/a-section/a-sec6/presentation/cs109b_asec6_deepRL_slides.pdf)
+
+I noticed that is not that trivial to find resources to learn RL online. There is some stuff on the theoretical side,but if you want a hands-on approach there is no such thing like Kaggle for Supervised Learning models or Hackerrank/Codeforces for classical algorithms. I will try to set up a framework to build RL projects and keep me motivated to go on.
+
+  
+
+### Resources on RL
+
+*   [Reinforcement Learning: An Introduction](http://incompleteideas.net/book/bookdraft2018mar21.pdf) by Richard S. Sutton and Andrew G. Barto
+*   [Spinning Up Reinforcement Learning](https://spinningup.openai.com/en/latest/) by OpenAI
+
+The main idea is to start with [OpenAi Gym](https://gym.openai.com/) or [DeepMind Lab](https://deepmind.com/research/publications/deepmind-lab/) and then try to replicate their main results with Atari Games and maybe attempt at stuff like Chess or Go
+
+  
+
+### 0. Building a (plotly) Dash webapp to visualize agent training
+
+My starting point is the homework of Harvard CS109 about reinforcement learning. They start with the simplest OpenAI Gym (grid-world), and they ask you to implement some easy model-based Policy Iteration,Value Iteration,and also model-free Sarsa and Q learning. I have been playing around with the homework for couple of days with some of my classmates in Harvard and implementing Sarsa and Q-Learning is more interesting then I expected. My plan now is to set up a local environment to play around with OpenAI gyms and learn more about the practical implementation of model-free algos. They look cool since even with a simple Q-Learning algo there is a lot to play around and tons of observation to make
+
+  
+![](https:/lessandro.herokuapp.com/static/imgs/openai_frozenlake.png)
+
+OpenAI FrozenLake is a 2-d grid worlds where the agent needs to go from start S to goal G avoiding special cells.
+
+### What I want to do
+
+So I want to get something done pretty quickly since tomorrow I meeting again with my classmate to work on Sarsa and Q-Learning, but I also want to take this as an opportunity to build a RL-learning platform to keep doing RL projects
+
+Short-term features*   See agent being trained in the environment live
+*   Common benchmarking reference
+*   Value tables and policy being updated live
+*   Be able to train multiple agents and visualize train side by side to highlight differences
+*   I want to have organized the learning agents clearly by GYM and by algorithm used
+
+Long-term features*   would be nice to have something in the middle between kaggle and leetcode
+*   interactive scripting
+*   levels and competitions
+*   compete with your agent against other agents
+
+I am not too sure right now what to implement, probably I need a web-app. I will first try to replicate locally the CS109 homework environment in the [open-AI gym called 'Frozen Lake'](http://gym.openai.com/envs/FrozenLake8x8-v0/).
+
+I have been looking at DeepMind videos where they show the desktop of guys in the office doing RL and looks like they are using some sort of web-application framework for Python data-science project. I looked online and found an interesting one called [DASH](https://plot.ly/products/dash/)
+
+After having played around for a while I would say that it does what I wanted, not super trivial to get used to it and there is not that much community online but is great if you want to get something done quickly. I [set up a GitHub repo](https://github.com/SolbiatiAlessandro/rl-gym/tree/74ceac6a6cbdd211ece56b032045c2cd0a5b70e4) where you can see what I did up to now
+
+  
+![](https:/lessandro.herokuapp.com/static/imgs/training.gif)
+
+This is the visualization tool I built on Dash using plotly of the training of a SARSA agent in a 8x8 FrozenLake gym, the heatmap represent the state values V learnt by the agent, and used to evaluate the movement policy. They get updated as the training episodes progress.
+
+So what did I do? I train my models, and they generate a sort of training backlog. In this case, the agent is learning to move into a 2d-grid-worlds and to arrive at a Goal cell. So I save the training behaviour and later I run an animation using [plotly](https://plot.ly/) inside dash, in my [jupyter lab](https://jupyterlab.readthedocs.io/en/stable/). This way I can see live how the agent is behaving.
+
+  
+
+How is this useful? One major problem in training the Q-Learning agents is that we couldn't find a correct balance for the [Exploration vs Exploitation](https://towardsdatascience.com/reinforcement-learning-demystified-exploration-vs-exploitation-in-multi-armed-bandit-setting-be950d2ee9f6) problem. We were using a [epsilon-greedy policy](https://prakhartechviz.blogspot.com/2019/02/epsilon-greedy-reinforcement-learning.html) during the training. Turns out the agent couldn't converge and arrive at the goal in an 8x8 grid world from the FrozenLake Gym, and with the Dash visualization we found out that the agent wasn't moving enough to reach the goal (over-exploiting). Given that we couldn't find a balanced epsilon for our epsilon-greedy policy we decided to change approach and we [told the agent to choose the policy with a random tie for the argmax over the Q-values](https://github.com/SolbiatiAlessandro/rl-gym/blob/2fda26687c5c0f811b042fff4140dabe3208952f/FrozenLake/TDmodel.py#L89). Big shout-out to [Eunice](http://euniceyeh.github.io), that gave me great insight in coming up with this intuition.
+
+This Dash visualization looks great, my next plan is to set up a better framework so that I can train agent side by side and see how different hyperparms/learning-algos make agents behave differently in their 2d grid-world.
+
+### More complex gyms
+
+_15.05.19_
+
+I decided to start [Berkley Deep Reinforcement Learning course CS294](https://github.com/SolbiatiAlessandro/CS294_DeepReinforcementLearning), and in the homework one we are using more advanced 3D gyms. I will try to repeat the same process I did above for these gyms.
+
+Turns out most 3D simulation use this software MuJoCo that requires a licence, so I am turning towards [roboschool](https://openai.com/blog/roboschool/), the openAI open-source 3D simluation software. Unfortunately CS294 course uses MuJoCo so I am not sure how much friction will cause this different dependency to the project. After some attempts I was able to render the humanoid gym with some pre-trained policy successfully without using any licensed software, you can run it on your machine cloning from [my CS294 repo at this commit.](https://github.com/SolbiatiAlessandro/CS294_DeepReinforcementLearning/tree/fb972550ae6598754f3ad41c1640cffd69274d26/homeworks/hw1)
+
+![](https://www.researchgate.net/publication/321417665/figure/fig1/AS:566594154831872@1512097981098/A-screenshot-of-Roboschools-3D-Humanoid-Walker-RoboschoolHumanoid-v1.png)
+
+Humanoid gym environment from OpenAI using open-source roboschool, instead of the licences MuJoCo used in the course
+
+The task for this homework is to do [imitation learning](https://www.youtube.com/watch?v=WjFdD7PDGw0), more specifically to do Behaviour Cloning from the pre-trained policy.
+
+I want to build a platform that let me iterate quickly on models and allow me to share them with other people, in this case, imitation learning models. Something like Kaggle, maybe a [Google App Engine](https://cloud.google.com/appengine/) instance running Flask connected to [Google ML Engine](https://cloud.google.com/ai-platform/) for the model training. Specifically for imitation learning I want to be able to 1) use different expert datasets 2) use different models 3) run them all and rank them.
+
+_11.06.19_
+
+I build a simple platform to deploy my models ([Reinforcement Learning Arena](https://github.com/SolbiatiAlessandro/relna)) and now I started play with Imitation Learning. I am following [Homework 1](http://rail.eecs.berkeley.edu/deeprlcoursehttps:/lessandro.herokuapp.com/static/homeworks/hw1.pdf), and started to implement Behavioural Cloning: I am given an expert policy and I need to build a agent that clone the expert policy behaviour. This are my trials so far (you can read some of the notebooks on the [Github repo](https://github.com/SolbiatiAlessandro/CS294_DeepReinforcementLearning/blob/master/homeworks/hw1/report.ipynb))
+
+*   50 MB of expert data, two layer dense neural networks: humanoid not walking
+*   500 MB of expert data, two layer dense neural networks: humanoid still not walking

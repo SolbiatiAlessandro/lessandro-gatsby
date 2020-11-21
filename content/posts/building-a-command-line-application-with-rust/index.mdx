@@ -1,0 +1,29 @@
+---
+title: Building a Command Line Application with Rust
+date: 2020-11-20
+tags:
+  - programming
+  - Rust
+---
+
+Lately I got interested in Rust, it sounds fun and hacky, and a lot of cool people use it. Here is me build some CLI applications in Rust because.. CLI application are fun?
+
+### Rust?
+
+Why Rust? It's a strongly typed programming language. What’s up with it? NPM use it. There is an interesting [HackerNews article](https://news.ycombinator.com/item?id=19294512) about it that explains why they use it at npm. It came up often recently in my tech browsing so I want to give it a try.
+
+Rust has a [suprisingly nice and eye-pleasing website](https://www.rust-lang.org/what/cli), so I can't wait to follow their CLI tutorial. Wait, there is even a ["Getting Started book"](https://rust-cli.github.io/book/index.html)? This is seriously cool, I am gonna do that. Please follow me.
+
+### First look at "Command line apps in Rust"
+
+First thing, this book doesn't joke in terms of UI, it seriously polished and I don't thing I ever saw it before. There is no "build with" at the bottom on the page and [from the Github Repo](https://github.com/rust-lang-nursery/cli-wg) I can't immediately tell what they used to build it. I will come back later on this.
+
+We will be building small grep clone. Wow, that's hacky. I was hoping for a todo-list. You install rust with a curl https://sh.rustup.rs -sSf | sh, that's even more hacky. I like it. The package manager is called [cargo](https://crates.io/). Running through the tutorial I get stuck pretty quickly at the sentence: "The structopt library builds on clap and provides a “derive” macro to generate clap code for struct definitions", it looks like we are trying to strong type the input args of the CLI program. Rust use this interesting #\[derive(StructOpt)\] syntax, looks like Python decorator but so far looks to me like a Javascript extends. You can [read the code from the repo](https://github.com/SolbiatiAlessandro/rust-tutorial/commit/ec9e1dcffccec75d3f856ca8d19a2125284c62a3).
+
+It really reminds of C, especially after I encounter the [& operator](https://doc.rust-lang.org/1.30.0/book/second-edition/ch04-02-references-and-borrowing.html). On the other hand, there is this awesome property that 'As \[Rust\] doesn’t have exceptions, all possible error states are often encoded in the return types of functions.' Coming from Python that really sounds attractive.
+
+### Setting myself up for Rust
+
+Rust is looking nice, I decide to get [the rust.vim configuration](https://github.com/rust-lang/rust.vim) for my vim. I added it to my [personal vimrc setting.](https://github.com/SolbiatiAlessandro/vimrc/commit/3709ed4b37d8b5b55d96023e4b3154ffb4c6a9e5) You can use :RustFmt to automatically format your rust code, and you can use a combination of :make build + :copen the get the build errors and open them in [quickfix](http://vimdoc.sourceforge.net/htmldoc/quickfix.html#quickfix). Having a look at the basic Rust packages, I pretty much liked [indicatif for CLI animations](https://crates.io/crates/indicatif): makes your CLI look neat ([here is my Rust progress bar](https://github.com/SolbiatiAlessandro/rust-tutorial/commit/59dfa447c3bd07fa7b522b97f7a71ca76b889c9c)). On a side note, the creator of indicatif is [Armin Ronacher](https://github.com/mitsuhiko), the same guy from Flask! Turns out he is a Rust fun, and wrote some nice blog post of [him building a HTTP cli in Rust.](https://github.com/getsentry/sentry-cli)
+
+This is what I built so far, I plan to keep following the Rust book to build some more, drop me a line at [hello@lessand.ro](mailto:hello@lessand.ro) if you read until here!
