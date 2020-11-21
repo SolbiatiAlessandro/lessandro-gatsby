@@ -11,6 +11,28 @@ import Hero from "../texts/hero"
 // @ts-ignore
 import Bottom from "../texts/bottom"
 
+const HomepageFooter = () => {
+  const { siteTitle } = useSiteMetadata()
+
+  return (
+    <footer
+      sx={{
+        boxSizing: `border-box`,
+        justifyContent: `space-between`,
+        mt: [8],
+        color: `secondary`,
+        a: {
+          variant: `links.secondary`,
+        },
+        flexDirection: [`column`, `column`, `row`],
+      }}
+	>
+	  <div>The floating objects are a simulation of the <a href='https://en.wikipedia.org/wiki/Three-body_problem'>Three Body Problem</a> written in the Lisp dialect <a href='https://clojurescript.org/'>ClojureScript</a>, you can <b><a href='https://raw.githubusercontent.com/SolbiatiAlessandro/three-body/master/src/three_body/core.cljs'>read the code here</a></b>.
+	  </div>
+    </footer>
+  )
+}
+
 type PostsProps = {
   posts: {
     slug: string
@@ -28,6 +50,7 @@ type PostsProps = {
 }
 
 const Homepage = ({ posts }: PostsProps) => {
+  console.log(posts)
   const { basePath, blogPath } = useMinimalBlogConfig()
   const { siteTitle } = useSiteMetadata()
 
@@ -35,7 +58,8 @@ const Homepage = ({ posts }: PostsProps) => {
 	<Layout>
       <section sx={{ mb: [5, 6, 7], p: { fontSize: [1, 2, 2], mt: 2 }, variant: `section_hero` }}>
         <Hero />
-      </section>
+	  </section>
+	  <HomepageFooter />
 	</Layout>
   )
 }
