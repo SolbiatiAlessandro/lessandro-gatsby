@@ -16,10 +16,11 @@ module.exports = {
 	author: `SolbiatiAlessandro`,
   },
   plugins: [
-    {
+	{
       resolve: `@lekoarts/gatsby-theme-minimal-blog`,
       // See the theme's README for all available options
       options: {
+		mdx: false,
         navigation: [
           {
             title: `Blog`,
@@ -109,5 +110,38 @@ module.exports = {
         environments: ["production"],
       },
     },
+	{
+        resolve: `gatsby-plugin-mdx`,
+        options: {
+          extensions: [`.mdx`, `.md`],
+          gatsbyRemarkPlugins: [
+            {
+              resolve: `gatsby-remark-images`,
+              options: {
+                maxWidth: 960,
+                quality: 90,
+                linkImagesToOriginal: false,
+              },
+            },
+			{
+			  resolve: 'gatsby-remark-embed-video',
+				options: {
+					width: 800,
+				}
+			},
+			'gatsby-remark-responsive-iframe'
+          ],
+          plugins: [
+            {
+              resolve: `gatsby-remark-images`,
+              options: {
+                maxWidth: 960,
+                quality: 90,
+                linkImagesToOriginal: false,
+              },
+            },
+          ],
+        },
+      },
   ].filter(Boolean),
 }
