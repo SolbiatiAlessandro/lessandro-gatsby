@@ -69,7 +69,7 @@ What will I do with custom charts? A good product strategy for what I want to bu
 *   3\. The last step (that can be done now or in the morning) is click the NEXT DAY button and let the system draw the plan for the next day. The all thing is wired in with your different calendars for outside meetings, but most importantly with the system prioritisation framework. It will lay down a plan broke down hour by hour on how the following day will look like. You can, of course, edit this and in the process adjust your calibration framework.
 *   4\. The next day begins and the system guides you through the day with different integrations like push-notifications on your devices and automatically booking time on your different calendars.
 
-![](https:/lessandro.herokuapp.com/static/imgs/datamonitor2.png)
+![](https://lessandro.herokuapp.com/static/imgs/datamonitor2.png)
 
 7-Days-Productivity histogram (custom-chart) built using chart.js library and google stack driver backend
 
@@ -77,19 +77,19 @@ Now I need to figure out more detail on how to build the single custom charts. S
 
 (01.07.2019) I started doing some research on how to log browsing activity and turns out I need to write myself a scraper since there are now public APIs to access that. I found some [similar repo implemented in go](https://github.com/jpathy/google-myactivity) , I will probably implement my own Python version of that. In the meanwhile, I improved the logging in terms of productivity tracking: I [implemented](https://github.com/SolbiatiAlessandro/datamonitor/commit/de6b2439ad7c7addae05ab952bdf53d9fb8c5d27) a planning tool that allows me to plan the day ahead and to track exactly how much time I worked on the things I planned I was going to work on. It looks like this.
 
-![](https:/lessandro.herokuapp.com/static/imgs/datamonitor3.png)
+![](https://lessandro.herokuapp.com/static/imgs/datamonitor3.png)
 
 Some cards inside the Daily-recap dashboard, related to the planning tracking tool.
 
 This fits into the [daily recap dashboard](https://github.com/SolbiatiAlessandro/datamonitor/commit/a9d5c0a62115f9a83ce9ec298200819061eaac29), where beside planning I want to put an hour-by-hour aggregate of my daily activity, both of productivity and also of browsing history.
 
-(09.07.2019) I used this dashboard for a week and it does its job but it looks a bit empty, I worked in previous days about integrating [myactivity.google.com](https://myactivity.google.com) inside my dashboard. I am really fascinated by the amount of personal data I can find on myactivity, they will totally make my dashboard more rich and accurate. I opened a new standalone repo to implement this scarper at [github.com/SolbiatiAlessandro/google\_myactivity\_scarper](https://github.com/SolbiatiAlessandro/google_myactivity_scraper). I looked for couple of options and how to build this and I decided to use [bs4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#) for the actual scraping and [pyppetterr](https://pypi.org/project/pyppeteer/) to run Chrome Headless. Where bs4 was kind of an obvious choice, I was not too familiar with headless browsers: you basically run chrome without the browser rendering. There is a nice library maintained by the Chrome/Chromium dudes called [Puppeteer](https://pptr.dev/), you can run headless Chrome as a nodejs application, and the trick is that [it can track your cookie sessions](https://github.com/GoogleChrome/puppeteer/issues/921) and automatically login into your google account to get your activity. ![](https:/lessandro.herokuapp.com/static/imgs/datamonitor4.png)
+(09.07.2019) I used this dashboard for a week and it does its job but it looks a bit empty, I worked in previous days about integrating [myactivity.google.com](https://myactivity.google.com) inside my dashboard. I am really fascinated by the amount of personal data I can find on myactivity, they will totally make my dashboard more rich and accurate. I opened a new standalone repo to implement this scarper at [github.com/SolbiatiAlessandro/google\_myactivity\_scarper](https://github.com/SolbiatiAlessandro/google_myactivity_scraper). I looked for couple of options and how to build this and I decided to use [bs4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#) for the actual scraping and [pyppetterr](https://pypi.org/project/pyppeteer/) to run Chrome Headless. Where bs4 was kind of an obvious choice, I was not too familiar with headless browsers: you basically run chrome without the browser rendering. There is a nice library maintained by the Chrome/Chromium dudes called [Puppeteer](https://pptr.dev/), you can run headless Chrome as a nodejs application, and the trick is that [it can track your cookie sessions](https://github.com/GoogleChrome/puppeteer/issues/921) and automatically login into your google account to get your activity. ![](https://lessandro.herokuapp.com/static/imgs/datamonitor4.png)
 
 You can read your own activity at [myactivity.google.com](myactivity.google.com). I was able to build a parser that sends all my personal info to my datamonitor backend
 
 (14.07.2019) After a lot of trials and error [I was able to build a parser for Google MyActivity](https://github.com/SolbiatiAlessandro/datamonitor/commit/b2e788a95ccbcd435b1e8ff23e629a200a0b676a). Turns out the python version of the app couldn't handle persistent login session so I needed to switch to NodeJs. Now that I am parsing all my activities from Google I need to think of an efficient way to organize them. The idea I am having is to [embed Google Calendar](https://support.google.com/calendar/answer/41207?hl=en) inside my web app and use the [google calendar API](https://developers.google.com/calendar/create-events) to add them to the calendar so I can clearly see how I am spending my time. On top of that, I will add a couple of additional metrics like 'time spent browsing' and so o.
 
-![](https:/lessandro.herokuapp.com/static/imgs/datamonitor5.png)
+![](https://lessandro.herokuapp.com/static/imgs/datamonitor5.png)
 
 Prototype for the integration of Google My Activity and Productivity Metrics with Google Calendar (these events are being automatically generated with Google Calendar APIs)
 

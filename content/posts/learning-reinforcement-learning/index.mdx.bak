@@ -34,7 +34,7 @@ The main idea is to start with [OpenAi Gym](https://gym.openai.com/) or [DeepMin
 My starting point is the homework of Harvard CS109 about reinforcement learning. They start with the simplest OpenAI Gym (grid-world), and they ask you to implement some easy model-based Policy Iteration,Value Iteration,and also model-free Sarsa and Q learning. I have been playing around with the homework for couple of days with some of my classmates in Harvard and implementing Sarsa and Q-Learning is more interesting then I expected. My plan now is to set up a local environment to play around with OpenAI gyms and learn more about the practical implementation of model-free algos. They look cool since even with a simple Q-Learning algo there is a lot to play around and tons of observation to make
 
   
-![](https:/lessandro.herokuapp.com/static/imgs/openai_frozenlake.png)
+![](https://lessandro.herokuapp.com/static/imgs/openai_frozenlake.png)
 
 OpenAI FrozenLake is a 2-d grid worlds where the agent needs to go from start S to goal G avoiding special cells.
 
@@ -60,7 +60,7 @@ I have been looking at DeepMind videos where they show the desktop of guys in th
 After having played around for a while I would say that it does what I wanted, not super trivial to get used to it and there is not that much community online but is great if you want to get something done quickly. I [set up a GitHub repo](https://github.com/SolbiatiAlessandro/rl-gym/tree/74ceac6a6cbdd211ece56b032045c2cd0a5b70e4) where you can see what I did up to now
 
   
-![](https:/lessandro.herokuapp.com/static/imgs/training.gif)
+![](https://lessandro.herokuapp.com/static/imgs/training.gif)
 
 This is the visualization tool I built on Dash using plotly of the training of a SARSA agent in a 8x8 FrozenLake gym, the heatmap represent the state values V learnt by the agent, and used to evaluate the movement policy. They get updated as the training episodes progress.
 
@@ -90,7 +90,7 @@ I want to build a platform that let me iterate quickly on models and allow me to
 
 _11.06.19_
 
-I build a simple platform to deploy my models ([Reinforcement Learning Arena](https://github.com/SolbiatiAlessandro/relna)) and now I started play with Imitation Learning. I am following [Homework 1](http://rail.eecs.berkeley.edu/deeprlcoursehttps:/lessandro.herokuapp.com/static/homeworks/hw1.pdf), and started to implement Behavioural Cloning: I am given an expert policy and I need to build a agent that clone the expert policy behaviour. This are my trials so far (you can read some of the notebooks on the [Github repo](https://github.com/SolbiatiAlessandro/CS294_DeepReinforcementLearning/blob/master/homeworks/hw1/report.ipynb))
+I build a simple platform to deploy my models ([Reinforcement Learning Arena](https://github.com/SolbiatiAlessandro/relna)) and now I started play with Imitation Learning. I am following [Homework 1](http://rail.eecs.berkeley.edu/deeprlcoursehttps://lessandro.herokuapp.com/static/homeworks/hw1.pdf), and started to implement Behavioural Cloning: I am given an expert policy and I need to build a agent that clone the expert policy behaviour. This are my trials so far (you can read some of the notebooks on the [Github repo](https://github.com/SolbiatiAlessandro/CS294_DeepReinforcementLearning/blob/master/homeworks/hw1/report.ipynb))
 
 *   50 MB of expert data, two layer dense neural networks: humanoid not walking
 *   500 MB of expert data, two layer dense neural networks: humanoid still not walking
